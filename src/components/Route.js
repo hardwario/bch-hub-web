@@ -17,18 +17,6 @@ class RouteIframeComponent extends Component {
         this.state = {visible: true};
     }
 
-    componentDidMount() {
-        if (this.props.id) {
-           // ipcRenderer.on("iframe:" + this.props.id + ":visible", (sender, visible)=>{ console.log("iframe:" + this.props.id + ":visible", visible); this.setState({visible}); });
-        }
-    }
-
-    componentWillUnmount() {
-        if (this.props.id) {
-         //   ipcRenderer.removeAllListeners("iframe:" + this.props.id + ":visible");
-        }
-    }
-
     render() {
         const { location, path, src } = this.props
 
