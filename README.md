@@ -7,6 +7,15 @@
 [![License](https://img.shields.io/github/license/bigclownlabs/bch-hub-web.svg)](https://github.com/bigclownlabs/bch-hub-web/blob/master/LICENSE)
 [![Twitter](https://img.shields.io/twitter/follow/BigClownLabs.svg?style=social&label=Follow)](https://twitter.com/BigClownLabs)
 
+## How it works
+
+Bigclown Hub is a simple static webpage that acts as a guidepost to all services running in raspberry pi or your computer/server.
+
+Links on the left side displays paired devices, MQTT messages or node-red or node-red dashboard. The node-red pages are displayed using frames.
+
+For running this the simpliest solution is install nginx `apt install nginx` and copy the content of this repository to `/var/www` folder.
+
+The message tab is using Mosquitto's MQTT over websockets, so you have to enable that functionality in mosquitto config file.
 
 ## Development
 
