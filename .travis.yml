@@ -1,0 +1,29 @@
+language: node_js
+
+node_js:
+  - "12"
+
+install:
+  - npm install
+
+script:
+  - npm run build
+  - ls -lha dist
+
+cache:
+  directories:
+    - node_modules
+
+before_deploy:
+  - cd dist && zip -r ../bch-hub-web-${TRAVIS_TAG}.zip * && cd ..
+
+deploy:
+  skip_cleanup: true
+  file_glob: true
+  file: bch-hub-web*.zip
+  api_key: ${GITHUB_KEY}
+  provider: releases
+  overwrite: true
+  on:
+    tags: true
+
