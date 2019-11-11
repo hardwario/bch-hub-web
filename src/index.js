@@ -10,7 +10,7 @@ import RadioManagerModel from "./model/RadioManager";
 import MqttLogModel from "./model/MqttLog";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./index.scss";
+import "./assets/scss/index.scss";
 import "./favicons";
 
 var hostname = location.hostname; //"hub.local";
