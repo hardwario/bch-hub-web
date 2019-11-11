@@ -12,6 +12,7 @@ export default class extends Component {
             pairing: props.model.getIsPairingModeStart(),
             editId: null,
             editValue: "",
+            lastAttachNodeId: null
         };
 
         this.textInput = React.createRef();
@@ -26,6 +27,7 @@ export default class extends Component {
         this.setEditId = this.setEditId.bind(this);
         this.saveAlias = this.saveAlias.bind(this);
         this.renameInputKeyPress = this.renameInputKeyPress.bind(this);
+        this.onAttach = this.onAttach.bind(this);
     }
 
     componentDidMount() {
@@ -34,6 +36,7 @@ export default class extends Component {
         this.props.model.on('connect',  this.onConnect);
         this.props.model.on('nodes',  this.onNodes);
         this.props.model.on("pairing-mode", this.onPairingMode);
+        this.props.model.on("attach", this.onAttach);
     }
 
     componentWillUnmount() {
@@ -42,6 +45,7 @@ export default class extends Component {
         this.props.model.removeListener('connect',  this.onConnect);
         this.props.model.removeListener('nodes', this.onNodes);
         this.props.model.removeListener("pairing-mode", this.onPairingMode);
+        this.props.model.removeListener("attach", this.onAttach);
     }
 
     onMqttConnect(connect) {
@@ -57,7 +61,10 @@ export default class extends Component {
             return this.setState({nodes});
         }
         for (let i=0, l=nodes.length; i < l; i++) {
-            if ((this.state.nodes[i].id != nodes[i].id) || (this.state.nodes[i].alias != nodes[i].alias)) {
+            if ((this.state.nodes[i].id != nodes[i].id) ||
+                (this.state.nodes[i].alias != nodes[i].alias) ||
+                (this.state.nodes[i].firmware != nodes[i].firmware)||
+                (this.state.nodes[i].version != nodes[i].version)) {
                 return this.setState({nodes});
             }
         }
@@ -67,6 +74,10 @@ export default class extends Component {
         if (this.state.pairing != pairing) {
             this.setState({pairing});
         }
+    }
+
+    onAttach(nodeId) {
+        this.setState({lastAttachNodeId: nodeId});
     }
 
     onCLickPairingBtn(e) {
@@ -87,14 +98,17 @@ export default class extends Component {
                 <div className="col-xs-12">
                     <div className="form-group">
                         <button disabled={!this.state.gatewayStatus} type="button" className={"btn " + (this.state.pairing ? "btn-danger" : "btn-success")} onClick={this.onCLickPairingBtn}>
-                            {this.state.pairing ? "Stop pairing" : "Start pairing"}
+                            {this.state.pairing ? <span>
+                            Stop pairing &nbsp; <span className={' blink_me'}>{'\u25cf'}</span>
+                            </span> : "Start pairing"}
                         </button>
                     </div>
-                    <table className="table table-bordered table-hover">
+                    <table className="table table-bordered table-hover devices">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Alias</th>
+                                {/*<th>Firmware</th>*/}
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -104,11 +118,14 @@ export default class extends Component {
                                     if (this.state.editId == item.id)
                                     {
                                         return (
-                                            <tr key={index}>
-                                                <td>{item.id}</td>
+                                            <tr key={index} >
+                                                <td >{item.id}</td>
                                                 <td>
                                                     <input type="text" autoFocus className="form-control" defaultValue={item.alias} ref={this.textInput} onKeyPress={this.renameInputKeyPress} />
                                                 </td>
+                                                {/*<td>
+                                                    {item.firmware}-{item.version}
+                                                </td> */}
                                                 <td>
                                                     <button onClick={() => self.saveAlias() } className="btn btn-success">Save</button>
                                                     &nbsp;
@@ -119,11 +136,16 @@ export default class extends Component {
                                     }
 
                                     return (
-                                        <tr key={index}>
-                                            <td>{item.id}</td>
+                                        <tr key={index} className={this.state.lastAttachNodeId == item.id ? "lastAttach": ""}>
+                                            <td >
+                                                {item.id}
+                                            </td>
                                             <td>
                                                 {item.alias}
                                             </td>
+                                            {/*<td>
+                                                {item.firmware}-{item.version}
+                                            </td>*/}
                                             <td>
                                                 <button onClick={() => self.setState({ editId: item.id }) } className="btn btn-warning">Rename</button>
                                                 &nbsp;
