@@ -60,8 +60,7 @@ class App extends Component {
 	      <div id="navbar" key="navbar">
 		  <aside className="">
 		      <nav>
-		          <NavLink exact to="/">Home</NavLink>
-		          <NavLink to="/devices" title={this.state.gatewayConnect === false ? "No Radio USB Dongle connected" : null}>Devices{this.state.gatewayConnect === false ?  <i className="fa fa-warning"></i> : null}</NavLink>
+		          <NavLink to="/" exact title={this.state.gatewayConnect === false ? "No Radio USB Dongle connected" : null}>Devices{this.state.gatewayConnect === false ?  <i className="fa fa-warning"></i> : null}</NavLink>
 		          <NavLink to="/functions">Functions</NavLink>
 		          <NavLink to="/dashboard">Dashboard</NavLink>
 		          <NavLink to="/messages">Messages</NavLink>
@@ -76,8 +75,7 @@ class App extends Component {
 		</div>
 
 		<main key="main">
-		  <RouteIframe path="/" exact src="https://start.bigclown.com/" />
-		  <RouteWithProps path="/devices" component={RadioManager} model={this.radiomanager} />
+		  <RouteWithProps path="/" exact component={RadioManager} model={this.radiomanager} />
 		  <RouteWithProps path="/messages" component={MqttLog} model={this.mqttlog} />
 		  <RouteIframe path="/functions" src={node_red_src} id="node-red" />
 		  <RouteIframe path="/dashboard" src={node_red_src + "ui"} />
