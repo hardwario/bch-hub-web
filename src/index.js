@@ -13,24 +13,29 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./assets/scss/index.scss";
 import "./favicons";
 
-var hostname = location.hostname; //"hub.local";
 
-var mqttws = "ws://" + hostname + ":9001";
-var node_red_src = "http://" + hostname + ":1880/";
+// const mqttws = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + location.pathname + "/mqtt-ws";
+// const node_red_src = "./node-red/";
+// const node_red_src_ui = './ui/';
+
+const hostname = location.hostname; //"hub.local";
+const mqttws = "ws://" + hostname + ":9001";
+const node_red_src = "http://" + hostname + ":1880/";
+const node_red_src_ui = "http://" + hostname + ":1880/ui";
 
 class App extends Component {
 
     constructor(props) {
         super(props);
-        
+
         this.radiomanager = new RadioManagerModel();
         this.mqttlog = new MqttLogModel();
 
         this.state = {
             visible: true,
-            gatewayConnect: null,
+            gatewayConnect: false,
             mqttConnect: null,
-        };        
+        };
     }
 
     componentDidMount() {
@@ -48,42 +53,42 @@ class App extends Component {
     }
 
     onGatewayConnect(status) {
-        this.setState({gatewayConnect: status});
+        this.setState({ gatewayConnect: status });
     }
     onmqttConnect(status) {
-        this.setState({mqttConnect: status});
+        this.setState({ mqttConnect: status });
     }
 
     render() {
-	  return  <HashRouter>
-	    <div id="app" >
-	      <div id="navbar" key="navbar">
-		  <aside className="">
-		      <nav>
-		          <NavLink to="/" exact title={this.state.gatewayConnect === false ? "No Radio USB Dongle connected" : null}>Devices{this.state.gatewayConnect === false ?  <i className="fa fa-warning"></i> : null}</NavLink>
-		          <NavLink to="/functions">Functions</NavLink>
-		          <NavLink to="/dashboard">Dashboard</NavLink>
-		          <NavLink to="/messages">Messages</NavLink>
-		      </nav>
+        return <HashRouter>
+            <div id="app" >
+                <div id="navbar" key="navbar">
+                    <aside className="" >
+                        <nav>
+                            <NavLink to="/" exact title={this.state.gatewayConnect === false ? "No Radio USB Dongle connected" : null}>Devices{this.state.gatewayConnect === false ? <i className="fa fa-warning"></i> : null}</NavLink>
+                            <NavLink to="/functions">Functions</NavLink>
+                            <NavLink to="/dashboard">Dashboard</NavLink>
+                            <NavLink to="/messages">Messages</NavLink>
+                        </nav>
 
-		      <nav className="bottom">
-		      </nav>
+                        <nav className="bottom">
+                        </nav>
                         <a href="https://www.hardwario.com/" target="_blank">
                             <img src={require("./assets/images/hw-logo-white.svg")} className="logo" />
-              </a>
-		  </aside>
-		</div>
+                        </a>
+                    </aside>
+                </div>
 
-		<main key="main">
-		  <RouteWithProps path="/" exact component={RadioManager} model={this.radiomanager} />
-		  <RouteWithProps path="/messages" component={MqttLog} model={this.mqttlog} />
-		  <RouteIframe path="/functions" src={node_red_src} id="node-red" />
-		  <RouteIframe path="/dashboard" src={node_red_src + "ui"} />
-	    </main>
-	      
-	    </div>
-	  </HashRouter>;
-	};
+                <main key="main">
+                    <RouteWithProps path="/" exact component={RadioManager} model={this.radiomanager} />
+                    <RouteWithProps path="/messages" component={MqttLog} model={this.mqttlog} />
+                    <RouteIframe path="/functions" src={node_red_src} id="node-red" />
+                    <RouteIframe path="/dashboard" src={node_red_src_ui} />
+                </main>
+
+            </div>
+        </HashRouter>;
+    };
 
 }
 
