@@ -108,49 +108,42 @@ export default class extends Component {
                             <tr>
                                 <th>ID</th>
                                 <th>Alias</th>
-                                {/*<th>Firmware</th>*/}
+                                <th>Firmware</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
                                 this.state.nodes.map((item, index) => {
-                                    if (this.state.editId == item.id)
-                                    {
-                                        return (
-                                            <tr key={index} >
-                                                <td >{item.id}</td>
-                                                <td>
-                                                    <input type="text" autoFocus className="form-control" defaultValue={item.alias} ref={this.textInput} onKeyPress={this.renameInputKeyPress} />
-                                                </td>
-                                                {/*<td>
-                                                    {item.firmware}-{item.version}
-                                                </td> */}
-                                                <td>
-                                                    <button onClick={() => self.saveAlias() } className="btn btn-success">Save</button>
-                                                    &nbsp;
-                                                    <button onClick={() => self.setState({ editId: null }) } className="btn btn-warning">Cancel</button>
-                                                </td>
-                                            </tr>
-                                        )
-                                    }
-
                                     return (
                                         <tr key={index} className={this.state.lastAttachNodeId == item.id ? "lastAttach": ""}>
                                             <td >
                                                 {item.id}
                                             </td>
                                             <td>
-                                                {item.alias}
+                                                { this.state.editId == item.id ?
+                                                <input type="text" autoFocus className="form-control  form-control-sm" defaultValue={item.alias} ref={this.textInput} onKeyPress={this.renameInputKeyPress} />
+                                                :
+                                                item.alias
+                                                }
                                             </td>
-                                            {/*<td>
-                                                {item.firmware}-{item.version}
-                                            </td>*/}
                                             <td>
-                                                <button onClick={() => self.setState({ editId: item.id }) } className="btn btn-warning">Rename</button>
-                                                &nbsp;
-                                                <button onClick={() => this.nodeRemove(item)} className="btn btn-danger">Remove</button>
+                                                {item.firmware}-{item.version}
                                             </td>
+                                            { this.state.editId == item.id ?
+                                            <td>
+                                                <button onClick={() => self.saveAlias() } className="btn btn-sm btn-success">Save</button>
+                                                &nbsp;
+                                                <button onClick={() => self.setState({ editId: null }) } className="btn btn-sm btn-warning">Cancel</button>
+                                            </td>
+                                            :
+                                            <td>
+
+                                                <button onClick={() => self.setState({ editId: item.id }) } className="btn btn-sm btn-warning">Rename</button>
+                                                &nbsp;
+                                                <button onClick={() => this.nodeRemove(item)} className="btn btn-sm btn-danger">Remove</button>
+                                            </td>
+                                            }
                                         </tr>
                                     )
                                 })
