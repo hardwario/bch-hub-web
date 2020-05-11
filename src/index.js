@@ -68,8 +68,8 @@ class App extends Component {
 
 		      <nav className="bottom">
 		      </nav>
-              <a href="https://www.bigclown.com/" target="_blank">
-		        <img src={require("./assets/images/logo.png")} className="logo" />
+                        <a href="https://www.hardwario.com/" target="_blank">
+                            <img src={require("./assets/images/hw-logo-white.svg")} className="logo" />
               </a>
 		  </aside>
 		</div>
