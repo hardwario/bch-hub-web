@@ -33,7 +33,8 @@ module.exports = {
         test: /\.(png|jpg|gif)$/,
         loader: 'url-loader',
         options: {
-          limit: 10000
+          limit: 10000,
+          esModule: false,
         }
       },
       {
@@ -42,6 +43,7 @@ module.exports = {
           options: {
             name: '[name].[ext]',
             outputPath: 'fonts/',
+            esModule: false,
           }
       }
     ]
