@@ -72,6 +72,7 @@ class App extends Component {
                         </nav>
 
                         <nav className="bottom">
+                            {window.navBotomText}
                         </nav>
                         <a href="https://www.hardwario.com/" target="_blank">
                             <img src={require("./assets/images/hw-logo-white.svg")} className="logo" />
