@@ -10,29 +10,17 @@ $navbar-padding-left: 5px;
     @keyframes slide-left {
         0% {
             width: 100%;
-            a {
-                padding: $navbar-padding-top $navbar-padding-right $navbar-padding-bottom $navbar-padding-left;
-            }
         }
         100% {
             width: 0px;
-            a {
-                padding: 0px;
-            }
         }
     }
     @keyframes slide-right {
         0% {
             width: 0%;
-            a {
-                padding: 0px;
-            }
         }
         100% {
             width: 100%;
-            a {
-                padding: $navbar-padding-top $navbar-padding-right $navbar-padding-bottom $navbar-padding-left;
-            }
         }
     }
     .fade-in {
@@ -73,15 +61,9 @@ $navbar-padding-left: 5px;
             padding: 5px 10px;
             color: white;
         }
-        .fa-warning {
-            color:#ffe100;
-        }
         a.active {
             background-color: #252532;
             color: white;
-            .fa-warning {
-                color: #ffe100;
-            }
         }
     }
     aside {
@@ -114,12 +96,5 @@ $navbar-padding-left: 5px;
     }
     .external {
         color: orange;
-    }
-    .fa-warning {
-        color: #e40328;
-        float: right;
-        vertical-align: baseline;
-        padding-top: 3px;
-        font-size: 16px;
     }
 }

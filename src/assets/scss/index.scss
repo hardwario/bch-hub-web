@@ -1,8 +1,6 @@
-$fa-font-path: "~font-awesome/fonts";
-@import '~font-awesome/scss/font-awesome.scss';
-@import "./Navbar";
-@import "./MqttLog";
-@import "./RadioManager";
+@use "./Navbar";
+@use "./MqttLog";
+@use "./RadioManager";
 
 body {
     overflow: hidden;

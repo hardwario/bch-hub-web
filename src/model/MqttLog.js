@@ -1,5 +1,5 @@
-const EventEmitter = require('events');
-const mqtt = require("mqtt");
+import EventEmitter from 'events';
+import mqtt from 'mqtt/dist/mqtt.esm'
 
 export default class extends EventEmitter {
 
@@ -24,6 +24,9 @@ export default class extends EventEmitter {
 
         this._url = url;
 
+        console.log("MQTT connecting to " + url);
+        console.log(mqtt);
+
         this.client = mqtt.connect(this._url);
 
         this.client.on("connect", () => {
@@ -41,7 +44,7 @@ export default class extends EventEmitter {
         });
 
         this.client.on("message", (topic, data) => {
-            let message = { topic: topic,  payload: data.toString(), time: new Date(), key: this._cnt++ };
+            let message = { topic: topic, payload: data.toString(), time: new Date(), key: this._cnt++ };
 
             this._messages.push(message);
 

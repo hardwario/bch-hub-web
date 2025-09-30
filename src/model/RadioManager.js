@@ -1,5 +1,6 @@
-const EventEmitter = require('events');
-const mqtt = require("mqtt");
+import EventEmitter from 'events';
+import mqtt from 'mqtt/dist/mqtt.esm'
+
 const gateway_topics = [
     "/info",
     "/nodes",
@@ -12,7 +13,7 @@ const gateway_topics = [
 
 export default class extends EventEmitter {
 
-    constructor(name="usb-dongle") {
+    constructor(name = "usb-dongle") {
         super();
         this.url = null;
         this.name = name;
@@ -37,6 +38,9 @@ export default class extends EventEmitter {
 
         this.url = url;
 
+        console.log("RadioManager connecting to " + url);
+        console.log(mqtt);
+
         this.client = mqtt.connect(this.url);
 
         this.client.on("connect", () => {
@@ -53,7 +57,7 @@ export default class extends EventEmitter {
 
             this.publish("gateway/all/info/get");
 
-            setTimeout(()=>{
+            setTimeout(() => {
                 if (!this.gatewayConnect) {
                     this.emit("connect", this.gatewayConnect);
                 }
@@ -82,7 +86,7 @@ export default class extends EventEmitter {
                 console.error(error, message);
             }
 
-            if (topic == "gateway/"  + this.name + "/info") {
+            if (topic == "gateway/" + this.name + "/info") {
                 this.info = payload;
 
                 if (payload) {
@@ -149,7 +153,7 @@ export default class extends EventEmitter {
         return this.pairingMode;
     }
 
-    publish(topic, payload=null) {
+    publish(topic, payload = null) {
         if (!this.mqttConnect) return;
 
         if (typeof topic == "object") {

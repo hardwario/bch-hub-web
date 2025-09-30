@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import copy from 'copy-to-clipboard';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faClipboard, faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 function formatTime(time) {
-    return  time.toTimeString().split(' ')[0];
+    return time.toTimeString().split(' ')[0];
 }
 
 export default class extends Component {
@@ -41,8 +43,8 @@ export default class extends Component {
         this.props.model.on('message', this.onMessage);
         this.props.model.on('subscribe', this.onSubscribeChange);
         this.props.model.on('unsubscribe', this.onSubscribeChange);
-        let el = ReactDOM.findDOMNode(this._ref_messages.current);
-        el.scrollTop = el.scrollHeight;
+        const el = this._ref_messages.current;
+        if (el) el.scrollTop = el.scrollHeight;
     }
     componentWillUnmount() {
         console.log("RadioManager:componentWillUnmount");
@@ -53,7 +55,7 @@ export default class extends Component {
     }
 
     onConnect(connect) {
-        this.setState({isConnected: connect});
+        this.setState({ isConnected: connect });
     }
 
     onMessage(message) {
@@ -64,7 +66,7 @@ export default class extends Component {
     }
 
     onSubscribeChange(topic) {
-        this.setState({subscribed_topics: this.props.model.getSubscribed()});
+        this.setState({ subscribed_topics: this.props.model.getSubscribed() });
     }
 
     onClickSubscribe(e) {
@@ -112,7 +114,7 @@ export default class extends Component {
         copy(message.topic, {
             debug: true,
             message: 'Press #{key} to copy',
-          });
+        });
     }
 
     _handleKeyDownPub(event) {
@@ -128,12 +130,12 @@ export default class extends Component {
     }
 
     componentDidUpdate() {
-        let el = ReactDOM.findDOMNode(this._ref_messages.current);
-        el.scrollTop = el.scrollHeight;
+        const el = this._ref_messages.current;
+        if (el) el.scrollTop = el.scrollHeight;
     }
 
     render() {
-        let  isHighlightedMessages = this.props.model.isHighlightedMessages;
+        let isHighlightedMessages = this.props.model.isHighlightedMessages;
         return (
             <div id="mqttlog">
 
@@ -143,10 +145,10 @@ export default class extends Component {
                             this.state.messages.map((item, index) => {
                                 return (
                                     <li key={item.key}>
-                                        <div>{formatTime(item.time)}&nbsp;<i title="Copy topic to Clipboard" onClick={() => this.onClickCopyTopic(item)} className="fa fa-clipboard" aria-hidden="true"></i>&nbsp;<span style={{ fontWeight: "bold" }}>{item.topic}&nbsp;</span></div>
+                                        <div>{formatTime(item.time)}&nbsp;<FontAwesomeIcon icon={faClipboard} title="Copy topic to Clipboard" onClick={() => this.onClickCopyTopic(item)} />&nbsp;<span style={{ fontWeight: "bold" }}>{item.topic}&nbsp;</span></div>
                                         <div>{item.payload}</div>
                                         <div className="ConsoleButton">
-                                            {isHighlightedMessages(item.topic) ? null :<i title="pinned topic" onClick={() => this.onClickAdd(item)} className="fa fa-thumb-tack" aria-hidden="true"></i>}
+                                            {isHighlightedMessages(item.topic) ? null : <FontAwesomeIcon icon={faThumbtack} title="pinned topic" onClick={() => this.onClickAdd(item)} />}
                                         </div>
                                     </li>)
                             })
@@ -160,9 +162,9 @@ export default class extends Component {
                             this.state.highlighted_messages.map((item, index) => {
                                 return (
                                     <li key={item.key}>
-                                        <div>{formatTime(item.time)}&nbsp;<i title="Copy topic to Clipboard" onClick={() => this.onClickCopyTopic(item)} className="fa fa-clipboard" aria-hidden="true"></i>&nbsp;<span style={{ fontWeight: "bold" }}>{item.topic}&nbsp;</span></div>
+                                        <div>{formatTime(item.time)}&nbsp;<FontAwesomeIcon icon={faClipboard} title="Copy topic to Clipboard" onClick={() => this.onClickCopyTopic(item)} />&nbsp;<span style={{ fontWeight: "bold" }}>{item.topic}&nbsp;</span></div>
                                         <div>{item.payload}</div>
-                                        <div className="ConsoleButton"><i  title="remove" onClick={() => this.onClickRemove(item)} className="fa fa-remove" aria-hidden="true"></i></div>
+                                        <div className="ConsoleButton"><FontAwesomeIcon icon={faTimes} title="remove" onClick={() => this.onClickRemove(item)} /></div>
                                     </li>
                                 )
                             })
@@ -174,34 +176,34 @@ export default class extends Component {
 
                 <div className="bottomLog">
 
-                <header className="h4">Publish message</header>
-                <div className="input-group mb-3 input-group-sm">
-                    <input className="form-control" value={this.state.pub_topic} onChange={(e) => this.setState({ pub_topic: e.target.value })} onKeyDown={this._handleKeyDownPub} type="text" placeholder="Enter topic to publish" />
-                    <input className="form-control" value={this.state.pub_payload} onChange={(e) => this.setState({ pub_payload: e.target.value })} onKeyDown={this._handleKeyDownPub} type="text" placeholder="Enter payload to publish" />
-                    <button disabled={!this.state.isConnected} onClick={this.onClickPublish} className="btn btn-primary btn-sm">Publish</button>
-                </div>
-
-                <header className="h4">Subscribed topics</header>
-                <div className="input-group input-group-sm">
-                    <input type="text" className="form-control" placeholder="Enter topic to subscribe" value={this.state.sub_topic} onChange={(e) => this.setState({ sub_topic: e.target.value })} onKeyDown={this._handleKeyDownSub} type="text" />
-                    <div className="input-group-append">
-                        <button type="submit" className="btn btn-primary mb-2" disabled={!this.state.isConnected} onClick={this.onClickSubscribe} >Subscribe</button>
+                    <header className="h4">Publish message</header>
+                    <div className="input-group mb-3 input-group-sm">
+                        <input className="form-control" value={this.state.pub_topic} onChange={(e) => this.setState({ pub_topic: e.target.value })} onKeyDown={this._handleKeyDownPub} type="text" placeholder="Enter topic to publish" />
+                        <input className="form-control" value={this.state.pub_payload} onChange={(e) => this.setState({ pub_payload: e.target.value })} onKeyDown={this._handleKeyDownPub} type="text" placeholder="Enter payload to publish" />
+                        <button disabled={!this.state.isConnected} onClick={this.onClickPublish} className="btn btn-primary btn-sm">Publish</button>
                     </div>
-                </div>
-                <div className="subTable">
-                    <ul>
-                        {
-                            this.state.subscribed_topics.map((topic, index) => {
-                                return (
-                                    <li key={index}>
-                                        <div>{topic}</div>
-                                        <div className="ConsoleButton"><i  title="remove" onClick={() => this.onClickUnsubscribe(topic)} className="fa fa-remove" aria-hidden="true"></i></div>
-                                    </li>
-                                )
-                            })
-                        }
-                    </ul>
-                </div>
+
+                    <header className="h4">Subscribed topics</header>
+                    <div className="input-group input-group-sm">
+                        <input type="text" className="form-control" placeholder="Enter topic to subscribe" value={this.state.sub_topic} onChange={(e) => this.setState({ sub_topic: e.target.value })} onKeyDown={this._handleKeyDownSub} type="text" />
+                        <div className="input-group-append">
+                            <button type="submit" className="btn btn-primary mb-2" disabled={!this.state.isConnected} onClick={this.onClickSubscribe} >Subscribe</button>
+                        </div>
+                    </div>
+                    <div className="subTable">
+                        <ul>
+                            {
+                                this.state.subscribed_topics.map((topic, index) => {
+                                    return (
+                                        <li key={index}>
+                                            <div>{topic}</div>
+                                            <div className="ConsoleButton"><FontAwesomeIcon icon={faTimes} title="remove" onClick={() => this.onClickUnsubscribe(topic)} /></div>
+                                        </li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    </div>
                 </div>
             </div>
 
